@@ -374,20 +374,40 @@ void resetRankings()
     statFile.close();
 }
 
+
+
+void gameDescription()
+{
+    string line(60,'=');
+    cout << line << endl;
+    cout << "Game Description" << endl;
+    cout << "Game Name: 3-Minute Vocabulary Guessing" << endl;
+    cout << "Objective:" << endl;
+    cout << "Players must guess the hidden words based on the chosen question's " << endl;
+    cout << "difficulty level (easy, medium, hard). The goal is to answer as many " << endl;
+    cout << "questions correctly as possible within the given time limit to achieve the highest total score." << endl;
+    cout << line << endl;
+}
+
+
 // เมนูหลัก
 void mainMenu()
 {
     int choice;
     do
     {
+        //เรียกใช้คำสั่ง
+        system("cls"); 
+        //แสดงเมนู
         cout << "\n=== Word Guessing Game ===\n";
         cout << "1. Play Game\n";
         cout << "2. View Statistics\n";
         cout << "3. Display Rankings by Score\n";
         cout << "4. Display Rankings by Time\n";
-        cout << "5. Reset Rankings\n"; // เพิ่มตัวเลือกรีเซ็ตอันดับ
+        cout << "5. Reset Rankings\n";
+        cout << "6. Game Description\n";
         cout << "6. Exit\n";
-        cout << "Select an option: ";
+        cout << "Enter Choose: ";
         cin >> choice;
 
         if (cin.fail()) // ตรวจสอบว่าการป้อนข้อมูลผิดพลาดหรือไม่
@@ -413,16 +433,19 @@ void mainMenu()
             displayRankingsByTime();
             break;
         case 5:
-            resetRankings(); // เรียกฟังก์ชันรีเซ็ตอันดับ
+            resetRankings();
             break;
         case 6:
+            gameDescription();
+            break;
+        case 7:
             cout << "Exiting the game. Goodbye!\n";
             break;
         default:
             cout << "Invalid choice! Please try again.\n";
             break;
         }
-    } while (choice != 6);
+    } while (choice != 7);
 }
 
 int main()
