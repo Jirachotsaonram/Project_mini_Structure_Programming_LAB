@@ -76,12 +76,6 @@ vector<GameStat> loadStatistics()
     ifstream statFile("game_stats.txt");
     vector<GameStat> stats;
 
-    if (!statFile.is_open())
-    {
-        cout << "No statistics available.\n";
-        return stats;
-    }
-
     string line;
     GameStat stat;
     while (getline(statFile, line))
@@ -192,9 +186,9 @@ void displayRankingsByScore()
     sort(stats.begin(), stats.end(), compareByScore);
 
     // แสดงผลอันดับ
-    string line(60,'=');
-    cout << right << setw(10) <<"\n===== Ranking by Total Score =====\n";
-    cout << line ;
+    string line(60, '=');
+    cout << right << setw(10) << "\n===== Ranking by Total Score =====\n";
+    cout << line;
     cout << "\nRank\tDate\t\t\tDifficulty\tScore\tTime\n";
     cout << line << endl;
     for (size_t i = 0; i < stats.size(); ++i)
@@ -230,7 +224,7 @@ void displayRankingsByTime()
     sort(stats.begin(), stats.end(), compareByTime);
 
     // แสดงอันดับตามเวลา
-    string line(60,'=');
+    string line(60, '=');
     cout << "\n===== Ranking by Time Taken (Fastest) =====\n";
     cout << line;
     cout << "\nRank\tDate\t\t\tDifficulty\tScore\tTime\n";
@@ -253,7 +247,6 @@ void viewStatistics()
     // เรียกใช้คำสั่ง
     system("cls");
     ifstream statFile("game_stats.txt");
-
 
     // ตรวจสอบว่าไฟล์ว่าง
     statFile.seekg(0, ios::end);
@@ -407,16 +400,33 @@ void playGame()
 // ฟังก์ชันรีเซ็ตอันดับ (ลบไฟล์ game_stats.txt)
 void resetRankings()
 {
+    string choise;
+    cout << "Do you want to delete your data?( Yes :: No ) :" << endl;
+    cin >> choise;
+    transform(word.begin(), word.end(), word.begin(), ::tolower);
     ofstream statFile("game_stats.txt", ios::trunc); // เปิดไฟล์แบบ trunc เพื่อลบข้อมูลทั้งหมด
-    if (statFile.is_open())
+    while (choise = "yes" || "y")
     {
-        cout << "All rankings and statistics have been reset.\n";
+        if (statFile.is_open())
+        {
+            cout << "All rankings and statistics have been reset.\n";
+            // คันด้วยกดปุ่มEnter
+            char Wait;
+            cin.get(Wait);
+            cout << "\nPress Enter to continue";
+            cin.get(Wait);
+        }
+        else
+        {
+            cout << "Error resetting rankings. Could not open the file.\n";
+            // คันด้วยกดปุ่มEnter
+            char Wait;
+            cin.get(Wait);
+            cout << "\nPress Enter to continue";
+            cin.get(Wait);
+        }
+        statFile.close();
     }
-    else
-    {
-        cout << "Error resetting rankings. Could not open the file.\n";
-    }
-    statFile.close();
 }
 
 void gameDescription()

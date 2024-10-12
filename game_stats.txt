@@ -1,7 +1,0 @@
-Date: Wed Oct  9 13:05:52 2024
-Difficulty: easy
-Correct: 0
-Wrong: 3
-Total Score: -15
-Time: 2 sec
-
