@@ -32,13 +32,14 @@ string generateHiddenWord(const string &word, const string &difficulty)
         numCharsToHide = 3 + (rand() % 2); // ซ่อน 3-4 ตัวอักษร
     }
 
+    vector<int> hiddenPositions;
+    while (hiddenPositions.size() < numCharsToHide)
     {
         int pos = rand() % (word.length() - 2) + 1; // เลือกตำแหน่งแบบสุ่ม ยกเว้นตัวแรกและตัวสุดท้าย
-        if (find(hiddenPositions.begin(), hiddenPositions.begin() + hiddenCount, pos) == hiddenPositions.begin() + hiddenCount)
+        if (find(hiddenPositions.begin(), hiddenPositions.end(), pos) == hiddenPositions.end())
         {
-            hiddenPositions[hiddenCount] = pos;
+            hiddenPositions.push_back(pos);
             hiddenWord[pos] = '_'; // ซ่อนตัวอักษรที่ตำแหน่งนั้น
-            hiddenCount++;
         }
     }
 
@@ -62,10 +63,9 @@ vector<string> splitString(const string &str, char delimiter)
     vector<string> tokens;
     string token;
     istringstream tokenStream(str);
-    count = 0;
     while (getline(tokenStream, token, delimiter))
     {
-        tokens[count++] = token;
+        tokens.push_back(token);
     }
     return tokens;
 }
@@ -102,8 +102,8 @@ vector<GameStat> loadStatistics()
         }
         else if (line.find("Time:") != string::npos)
         {
-            stat.timeTaken = stod(splitString(line, ' ', count)[1]); // ตัดเวลาออก
-            stats[numStats++] = stat; // เก็บข้อมูลสถิติ
+            stat.timeTaken = stod(splitString(line, ' ')[1]); // ตัดเวลาออก
+            stats.push_back(stat);                            // เก็บข้อมูลสถิติ
         }
     }
 
@@ -135,22 +135,22 @@ void saveStatistics(const GameStat &stat)
 vector<string> loadQuestions(const string &filename)
 {
     ifstream file(filename);
+    vector<string> questions;
     string question;
-    int count = 0;
 
     if (!file.is_open())
     {
         cout << "Unable to open file: " << filename << "\n";
-        return 0;
+        return questions;
     }
 
-    while (getline(file, question) && count < MAX_QUESTIONS)
+    while (getline(file, question))
     {
-        questions[count++] = question;
+        questions.push_back(question);
     }
 
     file.close();
-    return count; // ส่งกลับจำนวนคำถามที่โหลดได้
+    return questions;
 }
 
 // ฟังก์ชันเปรียบเทียบสำหรับการเรียงลำดับตามคะแนนรวม (มากไปน้อย)
@@ -168,12 +168,13 @@ bool compareByTime(const GameStat &a, const GameStat &b)
 // ฟังก์ชันแสดงอันดับตามคะแนนรวม
 void displayRankingsByScore()
 {
+    // เรียกใช้คำสั่ง
     system("cls");
-    int numStats;
-    auto stats = loadStatistics(numStats);
-    if (numStats == 0)
+    vector<GameStat> stats = loadStatistics();
+    if (stats.empty())
     {
         cout << "No statistics to display.\n";
+        // คันด้วยกดปุ่มEnter
         char Wait;
         cin.get(Wait);
         cout << "\nPress Enter to continue";
@@ -182,7 +183,7 @@ void displayRankingsByScore()
     }
 
     // เรียงลำดับตามคะแนนรวม
-    sort(stats.begin(), stats.begin() + numStats, compareByScore);
+    sort(stats.begin(), stats.end(), compareByScore);
 
     // แสดงผลอันดับ
     string line(60, '=');
@@ -190,11 +191,12 @@ void displayRankingsByScore()
     cout << line;
     cout << "\nRank\tDate\t\t\tDifficulty\tScore\tTime\n";
     cout << line << endl;
-    for (size_t i = 0; i < numStats; ++i)
+    for (size_t i = 0; i < stats.size(); ++i)
     {
         cout << (i + 1) << "\t" << stats[i].date << "\t" << stats[i].difficulty << "\t"
              << stats[i].totalScore << "\t" << stats[i].timeTaken << " sec\n";
     }
+    // คันด้วยกดปุ่มEnter
     char Wait;
     cin.get(Wait);
     cout << "\nSaved, Press Enter to continue";
@@ -204,12 +206,13 @@ void displayRankingsByScore()
 // ฟังก์ชันแสดงอันดับตามเวลา
 void displayRankingsByTime()
 {
+    // เรียกใช้คำสั่ง
     system("cls");
-    int numStats;
-    auto stats = loadStatistics(numStats);
-    if (numStats == 0)
+    vector<GameStat> stats = loadStatistics();
+    if (stats.empty())
     {
         cout << "No statistics to display.\n";
+        // คันด้วยกดปุ่มEnter
         char Wait;
         cin.get(Wait);
         cout << "\nPress Enter to continue";
@@ -218,7 +221,7 @@ void displayRankingsByTime()
     }
 
     // เรียงลำดับตามเวลา
-    sort(stats.begin(), stats.begin() + numStats, compareByTime);
+    sort(stats.begin(), stats.end(), compareByTime);
 
     // แสดงอันดับตามเวลา
     string line(60, '=');
@@ -226,11 +229,12 @@ void displayRankingsByTime()
     cout << line;
     cout << "\nRank\tDate\t\t\tDifficulty\tScore\tTime\n";
     cout << line << endl;
-    for (size_t i = 0; i < numStats; ++i)
+    for (size_t i = 0; i < stats.size(); ++i)
     {
         cout << (i + 1) << "\t" << stats[i].date << "\t" << stats[i].difficulty << "\t"
              << stats[i].totalScore << "\t" << stats[i].timeTaken << " sec\n";
     }
+    // คันด้วยกดปุ่มEnter
     char Wait;
     cin.get(Wait);
     cout << "\nSaved, Press Enter to continue";
@@ -240,121 +244,278 @@ void displayRankingsByTime()
 // ฟังก์ชันแสดงสถิติ
 void viewStatistics()
 {
+    // เรียกใช้คำสั่ง
     system("cls");
     ifstream statFile("game_stats.txt");
 
-    // ตรวจสอบว่าไฟล์สถิติสามารถเปิดได้หรือไม่
-    if (!statFile.is_open())
+    // ตรวจสอบว่าไฟล์ว่าง
+    statFile.seekg(0, ios::end);
+    if (statFile.tellg() == 0) // หากขนาดไฟล์เป็น 0
     {
-        cout << "No statistics available.\n";
+        cout << "No statistics to display.\n";
+        // คันด้วยกดปุ่มEnter
         char Wait;
         cin.get(Wait);
+        cout << "\nPress Enter to continue";
+        cin.get(Wait);
+        statFile.close();
         return;
     }
 
-    // อ่านและแสดงผลสถิติจากไฟล์
+    // รีเซ็ตตำแหน่งไฟล์ไปที่จุดเริ่มต้น
+    statFile.seekg(0, ios::beg);
+
+    cout << "\n===== View Statistics =====\n";
+
     string line;
     while (getline(statFile, line))
     {
         cout << line << endl;
     }
-
-    statFile.close(); // ปิดไฟล์
+    // หยุด ไปกดEnter
+    statFile.close();
     char Wait;
+    cin.get(Wait);
+    cout << "\nPress Enter to continue";
     cin.get(Wait);
 }
 
 // ฟังก์ชันการเล่นเกม
 void playGame()
 {
-    int correctAnswers = 0;
-    int wrongAnswers = 0;
-    int score = 0;
+    // เรียกใช้คำสั่ง
+    system("cls");
+    string difficulty;
+    string dfcl;
+    vector<string> words;
 
-    auto startTime = high_resolution_clock::now();
-
-    for (int i = 0; i < totalQuestions; ++i)
+    // เลือกระดับความยาก
+    cout << "Select difficulty (1. easy, 2. medium, 3. hard, 4. back): ";
+    cin >> dfcl;
+    transform(dfcl.begin(), dfcl.end(), dfcl.begin(), ::tolower); // แปลงอักษรเป็นตัวเล็ก
+    // ดึงคำถามจากไฟล์ตามระดับความยาก
+    if (dfcl == "1" || dfcl == "easy")
     {
-        string hiddenWord = generateHiddenWord(questions[i], difficulty);
-        cout << "Guess the word: " << hiddenWord << endl;
+        difficulty = "easy";
+        words = loadQuestions("easy_questions.txt");
+    }
+    else if (dfcl == "2" || dfcl == "medium")
+    {
+        difficulty = "medium";
+        words = loadQuestions("medium_questions.txt");
+    }
+    else if (dfcl == "3" || dfcl == "hard")
+    {
+        difficulty = "hard";
+        words = loadQuestions("hard_questions.txt");
+    }
+    else if (dfcl == "4")
+    {
+        return;
+    }
+    else
+    {
+        cout << "Invalid difficulty.\n";
+        return;
+    }
 
-        string answer;
-        cout << "Your answer: ";
-        cin >> answer;
+    // ตรวจสอบว่าได้คำถามหรือไม่
+    if (words.empty())
+    {
+        cout << "No questions available for this difficulty.\n";
+        return;
+    }
+
+    // สุ่มคำถาม
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(words.begin(), words.end(), g);
+
+    int correctAnswers = 0, wrongAnswers = 0;
+    auto startTime = high_resolution_clock::now();
+    int timeLimit = 3 * 60; // กำหนดเวลา 3 นาที (180 วินาที)
+
+    for (size_t i = 0; i < words.size(); ++i)
+    {
+        string guess;
+        string word = words[i];
+        string hiddenWord = generateHiddenWord(word, difficulty); // แสดงคำพร้อมช่องว่างตามระดับความยาก
+
+        cout << "Question " << (i + 1) << ": " << hiddenWord << "\n";
+        cout << "Your guess: ";
+        cin >> guess;
 
         // ตรวจสอบคำตอบ
-        if (answer == questions[i])
+        transform(guess.begin(), guess.end(), guess.begin(), ::tolower); // แปลงเป็นตัวพิมพ์เล็ก
+        transform(word.begin(), word.end(), word.begin(), ::tolower);    // แปลงเป็นตัวพิมพ์เล็ก
+        if (guess == word)
         {
-            cout << "Correct!\n";
             correctAnswers++;
-            score += 10; // เพิ่มคะแนน
+            cout << "Correct!\n";
         }
         else
         {
-            cout << "Wrong! The correct answer was: " << questions[i] << endl;
             wrongAnswers++;
+            cout << "Wrong! The correct word was: " << word << "\n";
+            if (wrongAnswers >= 3)
+            {
+                cout << "You have reached the maximum wrong answers.\n";
+                break;
+            }
+        }
+
+        // ตรวจสอบเวลา
+        auto currentTime = high_resolution_clock::now();
+        double elapsedTime = duration_cast<seconds>(currentTime - startTime).count();
+        if (elapsedTime >= timeLimit)
+        {
+            cout << "Time's up! The game has ended.\n";
+            break;
         }
     }
 
+    // คำนวณคะแนนรวม
+    int totalScore = correctAnswers * 10 - wrongAnswers * 5;
     auto endTime = high_resolution_clock::now();
-    auto duration = duration_cast<seconds>(endTime - startTime); // คำนวณเวลาที่ใช้
-
-    // แสดงผลลัพธ์
-    cout << "\nGame Over!\n";
-    cout << "Correct Answers: " << correctAnswers << endl;
-    cout << "Wrong Answers: " << wrongAnswers << endl;
-    cout << "Total Score: " << score << endl;
-    cout << "Time Taken: " << duration.count() << " seconds\n";
+    double duration = duration_cast<seconds>(endTime - startTime).count();
 
     // บันทึกสถิติ
-    GameStat stat;
-    stat.date = to_string(time(nullptr)); // วันที่เป็น Unix timestamp
-    stat.difficulty = difficulty;
-    stat.correctAnswers = correctAnswers;
-    stat.wrongAnswers = wrongAnswers;
-    stat.totalScore = score;
-    stat.timeTaken = duration.count();
+    time_t now = time(0);
+    char *dt = ctime(&now);
+    string dateTime(dt);
+    dateTime.erase(remove(dateTime.begin(), dateTime.end(), '\n'), dateTime.end()); // ลบ '\n' ออกจากวันที่
+    GameStat stat = {dateTime, difficulty, correctAnswers, wrongAnswers, totalScore, duration};
     saveStatistics(stat);
+
+    // แสดงผลคะแนน
+    cout << "\nGame Over! You got " << correctAnswers << " correct and " << wrongAnswers << " wrong.\n";
+    cout << "Your total score: " << totalScore << "\n";
+    cout << "Time taken: " << duration << " seconds.\n";
+    char Wait;
+    cin.get(Wait);
+    cout << "\nSaved, Press Enter to continue";
+    cin.get(Wait);
 }
 
-// ฟังก์ชันหลัก
+// ฟังก์ชันรีเซ็ตอันดับ (ลบไฟล์ game_stats.txt)
+void resetRankings()
+{
+    string choiseDelete;
+    cout << "Do you want to delete your data? (Yes :: No): ";
+    cin >> choiseDelete;
+    transform(choiseDelete.begin(), choiseDelete.end(), choiseDelete.begin(), ::tolower); // แปลงตัวอักษรเป็นตัวพิมพ์เล็ก
+
+    if (choiseDelete == "yes" || choiseDelete == "y")
+    {
+        ofstream statFile("game_stats.txt", ios::trunc); // เปิดไฟล์แบบ trunc เพื่อลบข้อมูลทั้งหมด
+        if (statFile.is_open())
+        {
+            cout << "All rankings and statistics have been reset.\n";
+        }
+        else
+        {
+            cout << "Error resetting rankings. Could not open the file.\n";
+        }
+        statFile.close();
+    }
+    else
+    {
+        cout << "Operation cancelled.\n";
+    }
+
+    // คันด้วยกดปุ่มEnter
+    char Wait;
+    cin.get(Wait);
+    cout << "\nPress Enter to continue";
+    cin.get(Wait);
+}
+
+
+void gameDescription()
+{
+    // เรียกใช้คำสั่ง
+    system("cls");
+    string line(30, '=');
+    cout << line << endl;
+    cout << "Game Description" << endl;
+    cout << "Game Name: 3-Minute Vocabulary Guessing" << endl;
+    cout << "Objective:" << endl;
+    cout << "Players must guess the hidden words based on the chosen question's " << endl;
+    cout << "difficulty level (easy, medium, hard). The goal is to answer as many " << endl;
+    cout << "questions correctly as possible within the given time limit to achieve " << endl;
+    cout << "the highest total score." << endl;
+    cout << line << endl;
+    // คันด้วยกดปุ่มEnter
+    char Wait;
+    cin.get(Wait);
+    cout << "\nPress Enter to continue";
+    cin.get(Wait);
+}
+
+// เมนูหลัก
+void mainMenu()
+{
+    int choice;
+    string line(30, '=');
+    do
+    {
+        // เรียกใช้คำสั่ง
+        system("cls");
+        // แสดงเมนู
+        cout << line;
+        cout << "\n===== Word Guessing Game =====\n";
+        cout << line << endl;
+        cout << "1. - Play Game\n";
+        cout << "2. - View Statistics\n";
+        cout << "3. - Display Rankings by Score\n";
+        cout << "4. - Display Rankings by Time\n";
+        cout << "5. - Reset Rankings\n";
+        cout << "6. - Game Description\n";
+        cout << "7. - Exit\n";
+        cout << line << endl;
+        cout << "Enter Choose: ";
+        cin >> choice;
+
+        if (cin.fail()) // ตรวจสอบว่าการป้อนข้อมูลผิดพลาดหรือไม่
+        {
+            cin.clear();                                         // เคลียร์สถานะของ cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ละเว้นข้อมูลที่ไม่ถูกต้อง
+            cout << "Invalid input! Please enter a number.\n";
+            continue; // กลับไปที่ลูป
+        }
+
+        switch (choice)
+        {
+        case 1:
+            playGame();
+            break;
+        case 2:
+            viewStatistics();
+            break;
+        case 3:
+            displayRankingsByScore();
+            break;
+        case 4:
+            displayRankingsByTime();
+            break;
+        case 5:
+            resetRankings();
+            break;
+        case 6:
+            gameDescription();
+            break;
+        case 7:
+            cout << "Exiting the game. Goodbye!\n";
+            break;
+        default:
+            cout << "Invalid choice! Please try again.\n";
+            break;
+        }
+    } while (choice != 7);
+}
+
 int main()
 {
-    srand(static_cast<unsigned int>(time(0))); // เริ่มต้นการสุ่ม
-
-    array<string, MAX_QUESTIONS> questions; // ตัวแปรเก็บคำถาม
-    int totalQuestions = loadQuestions("questions.txt", questions); // โหลดคำถามจากไฟล์
-
-    if (totalQuestions == 0)
-    {
-        cout << "No questions available to play.\n";
-        return 1; // ออกจากโปรแกรมถ้าคำถามไม่มี
-    }
-
-    string difficulty;
-    cout << "Select difficulty (easy, medium, hard): ";
-    cin >> difficulty;
-
-    playGame(questions, totalQuestions, difficulty); // เริ่มเกม
-
-    // แสดงสถิติ
-    char viewStatChoice;
-    cout << "Do you want to view statistics? (y/n): ";
-    cin >> viewStatChoice;
-    if (viewStatChoice == 'y' || viewStatChoice == 'Y')
-    {
-        viewStatistics();
-    }
-
-    // แสดงอันดับ
-    char rankingChoice;
-    cout << "Do you want to view rankings? (y/n): ";
-    cin >> rankingChoice;
-    if (rankingChoice == 'y' || rankingChoice == 'Y')
-    {
-        displayRankingsByScore();
-        displayRankingsByTime();
-    }
-
+    mainMenu();
     return 0;
 }
