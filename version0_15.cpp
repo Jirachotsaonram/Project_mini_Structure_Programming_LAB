@@ -32,39 +32,19 @@ string generateHiddenWord(const string &word, const string &difficulty)
         numCharsToHide = 3 + (rand() % 2); // ซ่อน 3-4 ตัวอักษร
     }
 
-    // กำหนดจำนวนตำแหน่งสูงสุดที่จะซ่อน (ความยาวของคำ - 2 เพื่อยกเว้นตัวแรกและตัวสุดท้าย)
-    const int maxPositions = word.length() - 2; 
-    int hiddenPositions[10]; // สมมติว่าต้องการซ่อนไม่เกิน 10 ตำแหน่ง
-    int count = 0;
-
-    // ทำการซ่อนตำแหน่ง
-    while (count < numCharsToHide)
+    vector<int> hiddenPositions;
+    while (hiddenPositions.size() < numCharsToHide)
     {
-        int pos = rand() % maxPositions + 1; // เลือกตำแหน่งแบบสุ่ม (ยกเว้นตัวแรกและตัวสุดท้าย)
-
-        // ตรวจสอบว่าตำแหน่งนี้ถูกซ่อนไว้แล้วหรือไม่
-        bool alreadyHidden = false;
-        for (int i = 0; i < count; i++)
+        int pos = rand() % (word.length() - 2) + 1; // เลือกตำแหน่งแบบสุ่ม ยกเว้นตัวแรกและตัวสุดท้าย
+        if (find(hiddenPositions.begin(), hiddenPositions.end(), pos) == hiddenPositions.end())
         {
-            if (hiddenPositions[i] == pos)
-            {
-                alreadyHidden = true;
-                break;
-            }
-        }
-
-        // ถ้ายังไม่ถูกซ่อน ให้ซ่อนตัวอักษรที่ตำแหน่งนี้
-        if (!alreadyHidden)
-        {
-            hiddenPositions[count] = pos; // เก็บตำแหน่ง
-            hiddenWord[pos] = '_';         // ซ่อนตัวอักษร
-            count++;                        // เพิ่มจำนวนตัวอักษรที่ซ่อน
+            hiddenPositions.push_back(pos);
+            hiddenWord[pos] = '_'; // ซ่อนตัวอักษรที่ตำแหน่งนั้น
         }
     }
 
     return hiddenWord;
 }
-
 
 // โครงสร้างสำหรับเก็บสถิติ
 struct GameStat
@@ -458,7 +438,7 @@ void gameDescription()
     string line(30, '=');
     cout << line << endl;
     cout << "Game Description" << endl;
-    cout << "Game Name: 3-Minute Word Guessing Game" << endl;
+    cout << "Game Name: 3-Minute Vocabulary Guessing" << endl;
     cout << "Objective:" << endl;
     cout << "Players must guess the hidden words based on the chosen question's " << endl;
     cout << "difficulty level (easy, medium, hard). The goal is to answer as many " << endl;
@@ -476,14 +456,14 @@ void gameDescription()
 void mainMenu()
 {
     int choice;
-    string line(38, '=');
+    string line(39, '=');
     do
     {
         // เรียกใช้คำสั่ง
         system("cls");
         // แสดงเมนู
         cout << line;
-        cout << "\n===== 3-Minute Word Guessing Game ====\n";
+        cout << "\n===== 3-Minute Word Guessing Game =====\n";
         cout << line << endl;
         cout << "1. - Play Game\n";
         cout << "2. - View Statistics\n";

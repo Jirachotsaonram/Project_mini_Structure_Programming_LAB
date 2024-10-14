@@ -75,3 +75,24 @@ Wrong: 3
 Total Score: -15
 Time: 2 sec
 
+Date: Mon Oct 14 22:54:34 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 3 sec
+
+Date: Mon Oct 14 22:54:59 2024
+Difficulty: hard
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 5 sec
+
+Date: Mon Oct 14 23:30:11 2024
+Difficulty: medium
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 2 sec
+
