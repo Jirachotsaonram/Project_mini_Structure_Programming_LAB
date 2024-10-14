@@ -19,3 +19,10 @@ Wrong: 1
 Total Score: -5
 Time: 195 sec
 
+Date: Mon Oct 14 21:41:13 2024
+Difficulty: medium
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 2 sec
+
