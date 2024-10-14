@@ -333,7 +333,7 @@ void playGame()
 
     int correctAnswers = 0, wrongAnswers = 0;
     auto startTime = high_resolution_clock::now();
-    int timeLimit = 3 * 60; // กำหนดเวลา 3 นาที (180 วินาที)
+    int timeLimit = 3 * 60; // กำหนดเวลา 3 นาที
 
     for (size_t i = 0; i < words.size(); ++i)
     {
@@ -369,7 +369,7 @@ void playGame()
         double elapsedTime = duration_cast<seconds>(currentTime - startTime).count();
         if (elapsedTime >= timeLimit)
         {
-            cout << "Time's up! The game has ended.\n";
+            cout << "Time's up!\n";
             break;
         }
     }
