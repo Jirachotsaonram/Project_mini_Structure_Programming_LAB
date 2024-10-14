@@ -400,34 +400,36 @@ void playGame()
 // ฟังก์ชันรีเซ็ตอันดับ (ลบไฟล์ game_stats.txt)
 void resetRankings()
 {
-    string choise;
-    cout << "Do you want to delete your data?( Yes :: No ) :" << endl;
-    cin >> choise;
-    transform(word.begin(), word.end(), word.begin(), ::tolower);
-    ofstream statFile("game_stats.txt", ios::trunc); // เปิดไฟล์แบบ trunc เพื่อลบข้อมูลทั้งหมด
-    while (choise = "yes" || "y")
+    string choiseDelete;
+    cout << "Do you want to delete your data? (Yes :: No): ";
+    cin >> choiseDelete;
+    transform(choiseDelete.begin(), choiseDelete.end(), choiseDelete.begin(), ::tolower); // แปลงตัวอักษรเป็นตัวพิมพ์เล็ก
+
+    if (choiseDelete == "yes" || choiseDelete == "y")
     {
+        ofstream statFile("game_stats.txt", ios::trunc); // เปิดไฟล์แบบ trunc เพื่อลบข้อมูลทั้งหมด
         if (statFile.is_open())
         {
             cout << "All rankings and statistics have been reset.\n";
-            // คันด้วยกดปุ่มEnter
-            char Wait;
-            cin.get(Wait);
-            cout << "\nPress Enter to continue";
-            cin.get(Wait);
         }
         else
         {
             cout << "Error resetting rankings. Could not open the file.\n";
-            // คันด้วยกดปุ่มEnter
-            char Wait;
-            cin.get(Wait);
-            cout << "\nPress Enter to continue";
-            cin.get(Wait);
         }
         statFile.close();
     }
+    else
+    {
+        cout << "Operation cancelled.\n";
+    }
+
+    // คันด้วยกดปุ่มEnter
+    char Wait;
+    cin.get(Wait);
+    cout << "\nPress Enter to continue";
+    cin.get(Wait);
 }
+
 
 void gameDescription()
 {
