@@ -438,7 +438,7 @@ void gameDescription()
     string line(30, '=');
     cout << line << endl;
     cout << "Game Description" << endl;
-    cout << "Game Name: 3-Minute Vocabulary Guessing" << endl;
+    cout << "Game Name: 3-Minute Word Guessing Game" << endl;
     cout << "Objective:" << endl;
     cout << "Players must guess the hidden words based on the chosen question's " << endl;
     cout << "difficulty level (easy, medium, hard). The goal is to answer as many " << endl;
@@ -456,14 +456,14 @@ void gameDescription()
 void mainMenu()
 {
     int choice;
-    string line(30, '=');
+    string line(38, '=');
     do
     {
         // เรียกใช้คำสั่ง
         system("cls");
         // แสดงเมนู
         cout << line;
-        cout << "\n===== Word Guessing Game =====\n";
+        cout << "\n===== 3-Minute Word Guessing Game ====\n";
         cout << line << endl;
         cout << "1. - Play Game\n";
         cout << "2. - View Statistics\n";

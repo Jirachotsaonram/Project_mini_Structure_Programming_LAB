@@ -26,3 +26,31 @@ Wrong: 3
 Total Score: -15
 Time: 2 sec
 
+Date: Mon Oct 14 22:13:51 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 3 sec
+
+Date: Mon Oct 14 22:14:02 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 3 sec
+
+Date: Mon Oct 14 22:14:27 2024
+Difficulty: easy
+Correct: 2
+Wrong: 3
+Total Score: 5
+Time: 17 sec
+
+Date: Mon Oct 14 22:35:38 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 1 sec
+
