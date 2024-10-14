@@ -32,19 +32,39 @@ string generateHiddenWord(const string &word, const string &difficulty)
         numCharsToHide = 3 + (rand() % 2); // ซ่อน 3-4 ตัวอักษร
     }
 
-    vector<int> hiddenPositions;
-    while (hiddenPositions.size() < numCharsToHide)
+    // กำหนดจำนวนตำแหน่งสูงสุดที่จะซ่อน (ความยาวของคำ - 2 เพื่อยกเว้นตัวแรกและตัวสุดท้าย)
+    const int maxPositions = word.length() - 2; 
+    int hiddenPositions[10]; // สมมติว่าต้องการซ่อนไม่เกิน 10 ตำแหน่ง
+    int count = 0;
+
+    // ทำการซ่อนตำแหน่ง
+    while (count < numCharsToHide)
     {
-        int pos = rand() % (word.length() - 2) + 1; // เลือกตำแหน่งแบบสุ่ม ยกเว้นตัวแรกและตัวสุดท้าย
-        if (find(hiddenPositions.begin(), hiddenPositions.end(), pos) == hiddenPositions.end())
+        int pos = rand() % maxPositions + 1; // เลือกตำแหน่งแบบสุ่ม (ยกเว้นตัวแรกและตัวสุดท้าย)
+
+        // ตรวจสอบว่าตำแหน่งนี้ถูกซ่อนไว้แล้วหรือไม่
+        bool alreadyHidden = false;
+        for (int i = 0; i < count; i++)
         {
-            hiddenPositions.push_back(pos);
-            hiddenWord[pos] = '_'; // ซ่อนตัวอักษรที่ตำแหน่งนั้น
+            if (hiddenPositions[i] == pos)
+            {
+                alreadyHidden = true;
+                break;
+            }
+        }
+
+        // ถ้ายังไม่ถูกซ่อน ให้ซ่อนตัวอักษรที่ตำแหน่งนี้
+        if (!alreadyHidden)
+        {
+            hiddenPositions[count] = pos; // เก็บตำแหน่ง
+            hiddenWord[pos] = '_';         // ซ่อนตัวอักษร
+            count++;                        // เพิ่มจำนวนตัวอักษรที่ซ่อน
         }
     }
 
     return hiddenWord;
 }
+
 
 // โครงสร้างสำหรับเก็บสถิติ
 struct GameStat

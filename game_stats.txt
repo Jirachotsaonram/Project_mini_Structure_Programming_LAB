@@ -54,3 +54,24 @@ Wrong: 3
 Total Score: -15
 Time: 1 sec
 
+Date: Mon Oct 14 22:45:24 2024
+Difficulty: hard
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 6 sec
+
+Date: Mon Oct 14 22:45:33 2024
+Difficulty: medium
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 4 sec
+
+Date: Mon Oct 14 22:45:45 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: -15
+Time: 2 sec
+
