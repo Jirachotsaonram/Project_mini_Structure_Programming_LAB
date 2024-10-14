@@ -12,3 +12,10 @@ Wrong: 3
 Total Score: -15
 Time: 4 sec
 
+Date: Mon Oct 14 21:34:04 2024
+Difficulty: easy
+Correct: 0
+Wrong: 1
+Total Score: -5
+Time: 195 sec
+
