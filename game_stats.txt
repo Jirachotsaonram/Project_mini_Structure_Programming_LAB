@@ -1,0 +1,21 @@
+Date: Thu Oct 31 12:23:40 2024
+Difficulty: easy
+Correct: 3
+Wrong: 3
+Total Score: 15
+Time: 29 sec
+
+Date: Thu Oct 31 12:24:15 2024
+Difficulty: easy
+Correct: 3
+Wrong: 3
+Total Score: 15
+Time: 22 sec
+
+Date: Thu Oct 31 12:24:38 2024
+Difficulty: hard
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 13 sec
+

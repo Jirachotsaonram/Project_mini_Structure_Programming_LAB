@@ -87,7 +87,7 @@ void mainMenu()
         cout << "Enter Choose: ";
         cin >> choice;
 
-        if (cin.fail()) // ตรวจสอบว่าการป้อนข้อมูลผิดพลาดหรือไม่
+        if (cin.fail()) // ตรวจสอบว่าการป้อนข้อมูลผิดพลาดหรือไม่ ใช้ตรวจสอบว่าการรับข้อมูลจากผู้ใช้ผ่าน std::cin สำเร็จหรือไม่ โดยเฉพาะเมื่อเราพยายามรับข้อมูลประเภทใดประเภทหนึ่ง เช่น ตัวเลข แต่ผู้ใช้ป้อนข้อมูลที่ไม่สามารถแปลงเป็นตัวเลขได้ เช่น ตัวอักษร ซึ่งจะทำให้ cin เกิดสถานะ "ล้มเหลว" และ cin.fail() จะคืนค่าเป็น true
         {
             cin.clear();                                         // เคลียร์สถานะของ cin
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ละเว้นข้อมูลที่ไม่ถูกต้อง
@@ -139,7 +139,7 @@ void playGame()
     clearScreen();
     string difficulty;
     string dfcl;
-    vector<string> words;
+    vector<string> words;  // ใช้สร้างตัวแปร words ซึ่งเป็น vector ของ string โดย vector นี้สามารถเก็บข้อมูลประเภท string ได้หลาย ๆ ค่า และยังสามารถขยายขนาดได้ตามที่ต้องการ
 
     // เลือกระดับความยาก
     cout << "Select difficulty (1. easy, 2. medium, 3. hard, 4. back): ";
@@ -183,13 +183,13 @@ void playGame()
     }
 
     // สุ่มคำถาม
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(words.begin(), words.end(), g);
+    random_device rd;       // สร้างค่าที่สุ่มขึ้นมาเพื่อนำไปเป็น seed สำหรับตัวสร้างตัวเลขสุ่ม
+    mt19937 g(rd());        // ใช้ mt19937 (Mersenne Twister) ในการสร้างตัวเลขสุ่มโดยใช้ค่า seed จาก rd เพื่อให้การสุ่มมีความแม่นยำสูง
+    shuffle(words.begin(), words.end(), g);     // ฟังก์ชัน shuffle ใช้สำหรับสุ่มลำดับข้อมูลใน words โดยเรียงคำถามใหม่แบบสุ่ม ทำให้คำถามที่ได้มีลำดับใหม่ทุกครั้งที่เรียกใช้
 
-    int correctAnswers = 0, wrongAnswers = 0;
-    auto startTime = high_resolution_clock::now();
-    int timeLimit = 3 * 60; // กำหนดเวลา 3 นาที
+    int correctAnswers = 0, wrongAnswers = 0;       // สร้างตัวแปรสำหรับนับจำนวนคำตอบที่ถูกและผิด เริ่มต้นเป็น 0
+    auto startTime = high_resolution_clock::now();      // ใช้ high_resolution_clock จาก <chrono> เพื่อบันทึกเวลาที่เริ่มทำแบบทดสอบ
+    int timeLimit = 3 * 60; // กำหนดเวลา 3 นาที 180 วินาที
 
     for (size_t i = 0; i < words.size(); ++i)
     {
@@ -221,8 +221,8 @@ void playGame()
         }
 
         // ตรวจสอบเวลา
-        auto currentTime = high_resolution_clock::now();
-        double elapsedTime = duration_cast<seconds>(currentTime - startTime).count();
+        auto currentTime = high_resolution_clock::now();        // high_resolution_clock เป็นคลาสจากไลบรารี <chrono> ที่ใช้เพื่อจับเวลาที่มีความละเอียดสู
+        double elapsedTime = duration_cast<seconds>(currentTime - startTime).count();       // duration_cast<seconds>(...) ใช้เพื่อแปลงค่าที่ได้ให้เป็นหน่วยวินาที
         if (elapsedTime >= timeLimit)
         {
             cout << "Time's up!\n";
@@ -241,8 +241,8 @@ void playGame()
 
     // บันทึกสถิติ
     time_t now = time(0);
-    char *dt = ctime(&now);
-    string dateTime(dt);
+    char *dt = ctime(&now);     // ctime(&now) ใช้เพื่อแปลงค่า time_t เป็นสตริงที่แสดงวันที่และเวลาปัจจุบันในรูปแบบที่อ่านง่าย (เช่น "Wed Oct 31 10:45:37 2024")
+    string dateTime(dt);        // ใช้ remove เพื่อย้ายตัวอักษร '\n' (newline) ไปที่ท้ายสตริง แล้ว erase จะลบส่วนที่อยู่ในอาเรย์หลังจากตัวอักษรที่ไม่ต้องการออก
     dateTime.erase(remove(dateTime.begin(), dateTime.end(), '\n'), dateTime.end()); // ลบ '\n' ออกจากวันที่
     GameStat stat = {dateTime, difficulty, correctAnswers, wrongAnswers, totalScore, duration};
     saveStatistics(stat);
@@ -500,7 +500,7 @@ vector<GameStat> loadStatistics()
     {
         if (line.find("Date:") != string::npos)
         {
-            stat.date = line.substr(6); // ตัด "Date: " ออก
+            stat.date = line.substr(6); // ตัด "Date: " ออก  ฟังก์ชัน find() จะค้นหาสตริง "Date:" ภายในสตริง lineถ้าพบ "Date:" จะคืนค่าตำแหน่ง (index) ที่เริ่มต้นของสตริง "Date:" ใน line.ถ้าไม่พบ จะคืนค่า string::npos, ซึ่งเป็นค่าคงที่ที่แสดงถึงตำแหน่งที่ไม่ถูกต้อง
         }
         else if (line.find("Difficulty:") != string::npos)
         {

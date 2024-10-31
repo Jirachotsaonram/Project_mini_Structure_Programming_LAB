@@ -71,7 +71,8 @@
     "iosfwd": "cpp",
     "ostream": "cpp",
     "fstream": "cpp",
-    "chrono": "cpp"
+    "chrono": "cpp",
+    "limits": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
