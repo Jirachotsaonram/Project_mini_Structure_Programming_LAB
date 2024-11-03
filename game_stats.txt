@@ -19,3 +19,17 @@ Wrong: 3
 Total Score: 0
 Time: 13 sec
 
+Date: Sun Nov  3 12:42:49 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 11 sec
+
+Date: Sun Nov  3 12:43:17 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 18 sec
+
