@@ -33,3 +33,52 @@ Wrong: 3
 Total Score: 0
 Time: 18 sec
 
+Date: Sun Nov  3 20:48:50 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 13 sec
+
+Date: Sun Nov  3 20:54:22 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 18 sec
+
+Date: Sun Nov  3 20:54:50 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 20 sec
+
+Date: Sun Nov  3 20:55:13 2024
+Difficulty: easy
+Correct: 0
+Wrong: 3
+Total Score: 0
+Time: 19 sec
+
+Date: Sun Nov  3 20:55:46 2024
+Difficulty: easy
+Correct: 2
+Wrong: 3
+Total Score: 5
+Time: 21 sec
+
+Date: Sun Nov  3 21:08:19 2024
+Difficulty: medium
+Correct: 0
+Wrong: 1
+Total Score: 0
+Time: 381 sec
+
+Date: Sun Nov  3 21:34:23 2024
+Difficulty: easy
+Correct: 0
+Wrong: 2
+Total Score: 0
+Time: 1188 sec
+
